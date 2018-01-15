@@ -1,7 +1,9 @@
+import com.sun.org.apache.bcel.internal.Repository.addClass
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.Parent
+import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import javafx.scene.control.TreeItem
 import javafx.scene.paint.Color
@@ -224,6 +226,14 @@ class MyView3 : View() {
             .distinct().map { Person(it, "") }
 
     override val root = vbox {
+        this += DangerButton()
+        button("To View 1") {
+            addClass(MyStyle.tackyButton)
+            action {
+                replaceWith(TutorialView::class, ViewTransition.Explode(1.5.seconds, point(2,2)))
+            }
+        }
+
         val numbers = (1..10).toList()
         datagrid(numbers) {
             cellHeight = 75.0
@@ -253,4 +263,75 @@ class MyView3 : View() {
     }
 
 
+}
+class MyStyle: Stylesheet() {
+
+    companion object {
+        val redStyle by cssclass()
+        val tackyButton by cssclass()
+
+        private val topColor = Color.RED
+        private val rightColor = Color.DARKGREEN
+        private val leftColor = c("#FFA500")
+        private val bottomColor = c("#800080")
+    }
+
+    init {
+        val redAllTheThings = mixin {
+            backgroundInsets += box(5.px)
+            borderColor += box(Color.RED)
+            textFill = Color.RED
+        }
+
+        redStyle {
+            +redAllTheThings
+        }
+
+        s(textInput, label) {
+            +redAllTheThings
+            fontWeight = FontWeight.BOLD
+        }
+
+        passwordField {
+            +redAllTheThings
+            backgroundColor += Color.YELLOW
+        }
+
+        tackyButton {
+            rotate = 10.deg
+            borderColor += box(topColor,rightColor,bottomColor,leftColor)
+            fontFamily = "Comic Sans MS"
+            fontSize = 20.px
+        }
+        button {
+            rotate = 33.deg
+            borderColor += box(topColor, topColor, topColor, topColor)
+            fontSize = 33.px
+            and(hover) {
+                backgroundColor += Color.TURQUOISE
+            }
+        }
+    }
+}
+
+class DangerButton : Button("Danger!") {
+    init {
+        addClass(DangerButtonStyles.dangerButton)
+    }
+    override fun getUserAgentStylesheet() = DangerButtonStyles().base64URL.toExternalForm()
+}
+
+class DangerButtonStyles : Stylesheet() {
+    companion object {
+        val dangerButton by cssclass()
+    }
+
+    init {
+        dangerButton {
+            backgroundInsets += box(0.px)
+            fontWeight = FontWeight.BOLD
+            fontSize = 20.px
+            padding = box(10.px)
+        }
+    }
 }
