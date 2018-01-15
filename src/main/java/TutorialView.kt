@@ -5,6 +5,8 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.stage.StageStyle
 import tornadofx.*
+import java.time.LocalDate
+import java.time.Period
 import kotlin.concurrent.thread
 
 class MainView: View() {
@@ -91,11 +93,37 @@ class MyFragment: Fragment() {
 }
 
 class MyView2: View() {
+    private val persons = listOf(
+            Person(1,"Samantha Stuart", LocalDate.of(1981,12,4)),
+            Person(2,"Tom Marks",LocalDate.of(2001,1,23)),
+            Person(3,"Stuart Gills",LocalDate.of(1989,5,23)),
+            Person(3,"Nicole Williams",LocalDate.of(1998,8,11))
+    ).observable()
+
     override val root = vbox {
+
         button("Go to MyView1") {
             action {
                 replaceWith(MainView::class, ViewTransition.Slide(1.5.seconds, ViewTransition.Direction.UP))
             }
         }
+
+        tableview(persons) {
+            column("ID",Person::id)
+            column("Name", Person::name)
+            column("Birthday", Person::birthday)
+            column("Age",Person::age)
+        }
     }
+}
+
+class Person(id: Int, name: String, birthday: LocalDate) {
+    var id by property(id)
+    fun idProperty() = getProperty(Person::id)
+    var name by property(name)
+    fun nameProperty() = getProperty(Person::name)
+    var birthday by property(birthday)
+    fun birthdayProperty() = getProperty(Person::birthday)
+
+    val age: Int get() = Period.between(birthday, LocalDate.now()).years
 }
