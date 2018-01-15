@@ -1,8 +1,12 @@
 import javafx.application.Platform
 import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import javafx.scene.Parent
 import javafx.scene.control.TextField
+import javafx.scene.control.TreeItem
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
+import javafx.scene.text.FontWeight
 import javafx.stage.StageStyle
 import tornadofx.*
 import java.time.LocalDate
@@ -22,10 +26,27 @@ class TutorialView : View() {
                 find(MyFragment::class).openModal(stageStyle = StageStyle.UTILITY)
             }
         }
+        hbox {
+            button("Go to MyView2") {
+                action {
+                    replaceWith(MyView2::class, ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT))
+                }
+                style {
+                    fontWeight = FontWeight.EXTRA_BOLD
+                    borderColor += box(
+                            top = Color.RED,
+                            right = Color.DARKGREEN,
+                            left = Color.ORANGE,
+                            bottom = Color.PURPLE
+                    )
+                    rotate = 45.deg
+                }
 
-        button("Go to MyView2") {
-            action {
-                replaceWith(MyView2::class, ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT))
+            }
+            button("Go to MyView3") {
+                action{
+                    replaceWith(MyView3::class)
+                }
             }
         }
 
@@ -74,6 +95,10 @@ class TutorialView : View() {
                 }
             }
         }
+        children.style {
+            backgroundColor += Color.LIGHTGREEN
+            textFill = Color.PINK
+        }
     }
 
 }
@@ -93,12 +118,29 @@ class MyFragment: Fragment() {
 }
 
 class MyView2: View() {
+
+
+    class Person(id: Int, name: String, birthday: LocalDate) {
+        var id by property(id)
+        fun idProperty() = getProperty(Person::id)
+        var name by property(name)
+        fun nameProperty() = getProperty(Person::name)
+        var birthday by property(birthday)
+        fun birthdayProperty() = getProperty(Person::birthday)
+
+        val age: Int get() = Period.between(birthday, LocalDate.now()).years
+    }
+
+
     private val persons = listOf(
             Person(1,"Samantha Stuart", LocalDate.of(1981,12,4)),
             Person(2,"Tom Marks",LocalDate.of(2001,1,23)),
             Person(3,"Stuart Gills",LocalDate.of(1989,5,23)),
             Person(3,"Nicole Williams",LocalDate.of(1998,8,11))
     ).observable()
+
+
+
 
     override val root = vbox {
 
@@ -109,21 +151,106 @@ class MyView2: View() {
         }
 
         tableview(persons) {
-            column("ID",Person::id)
-            column("Name", Person::name)
-            column("Birthday", Person::birthday)
-            column("Age",Person::age)
+            column("ID",Person::id).makeEditable()
+            column("Name", Person::name).makeEditable()
+            column("Birthday", Person::birthday).makeEditable()
+            // how to make this update when birthday is changed?
+            column("Age",Person::age).cellFormat {
+                text = it.toString()
+                style {
+                    if(it < 22) {
+                        backgroundColor += c("#8b0000")
+                        textFill = Color.WHITE
+                    } else {
+                        backgroundColor += Color.WHITE
+                        textFill = Color.BLACK
+                    }
+                }
+            }
         }
+
+        tableview(regions) {
+            column("ID",Region::id)
+            column("Name", Region::name)
+            column("Country", Region::country)
+            rowExpander(expandOnDoubleClick = true) {
+                paddingLeft = expanderColumn.width
+                tableview(it.branches) {
+                    column("ID",Branch::id)
+                    column("Facility Code",Branch::facilityCode)
+                    column("City",Branch::city)
+                    column("State/Province",Branch::stateProvince)
+                }
+            }
+        }
+
     }
 }
 
-class Person(id: Int, name: String, birthday: LocalDate) {
-    var id by property(id)
-    fun idProperty() = getProperty(Person::id)
-    var name by property(name)
-    fun nameProperty() = getProperty(Person::name)
-    var birthday by property(birthday)
-    fun birthdayProperty() = getProperty(Person::birthday)
 
-    val age: Int get() = Period.between(birthday, LocalDate.now()).years
+
+class Branch(val id: Int, val facilityCode: String, val city: String, val stateProvince
+: String)
+class Region(val id: Int, val name: String, val country: String, val branches: ObservableList<Branch>)
+
+val regions = listOf(
+        Region(1,"Pacific Northwest", "USA",listOf(
+                Branch(1,"D","Seattle","WA"),
+                Branch(2,"W","Portland","OR")
+        ).observable()),
+        Region(2,"Alberta", "Canada",listOf(
+                Branch(3,"W","Calgary","AB")
+        ).observable()),
+        Region(3,"Midwest", "USA", listOf(
+                Branch(4,"D","Chicago","IL"),
+                Branch(5,"D","Frankfort","KY"),
+                Branch(6, "W","Indianapolis", "IN")
+        ).observable())
+).observable()
+
+class MyView3 : View() {
+    data class Person(val name: String, val department: String)
+    val persons = listOf(
+            Person("Mary Hanes","Marketing"),
+            Person("Steve Folley","Customer Service"),
+            Person("John Ramsy","IT Help Desk"),
+            Person("Erlick Foyes","Customer Service"),
+            Person("Erin James","Marketing"),
+            Person("Jacob Mays","IT Help Desk"),
+            Person("Larry Cable","Customer Service")
+    )
+    val departments = persons
+            .map { it.department }
+            .distinct().map { Person(it, "") }
+
+    override val root = vbox {
+        val numbers = (1..10).toList()
+        datagrid(numbers) {
+            cellHeight = 75.0
+            cellWidth = 75.0
+            multiSelect = true
+            cellCache {
+                stackpane {
+                    circle(radius = 25.0) {
+                        fill = Color.FORESTGREEN
+                    }
+                    label(it.toString())
+                }
+            }
+        }
+        treeview<Person> {
+            // Create root item
+            root = TreeItem(Person("Departments", ""))
+            // Make sure the text in each TreeItem is the name of the Person
+            cellFormat { text = it.name }
+            // Generate items. Children of the root item will contain departments
+            populate { parent ->
+                if (parent == root) departments else persons.filter { it.department == parent.
+                        value.name }
+            }
+        }
+
+    }
+
+
 }
