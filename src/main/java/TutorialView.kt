@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.time.Period
 import kotlin.concurrent.thread
 
-class MainView: View() {
+class TutorialView : View() {
     private val controller: MyController by inject()
 
     var firstNameField: TextField by singleAssign()
@@ -104,7 +104,7 @@ class MyView2: View() {
 
         button("Go to MyView1") {
             action {
-                replaceWith(MainView::class, ViewTransition.Slide(1.5.seconds, ViewTransition.Direction.UP))
+                replaceWith(TutorialView::class, ViewTransition.Slide(1.5.seconds, ViewTransition.Direction.UP))
             }
         }
 
