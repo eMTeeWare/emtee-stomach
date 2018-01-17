@@ -2,18 +2,179 @@ import com.sun.org.apache.bcel.internal.Repository.addClass
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.geometry.Insets
 import javafx.scene.Parent
 import javafx.scene.control.Button
+import javafx.scene.control.TabPane
 import javafx.scene.control.TextField
 import javafx.scene.control.TreeItem
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.stage.StageStyle
+import javafx.util.Duration
 import tornadofx.*
 import java.time.LocalDate
 import java.time.Period
 import kotlin.concurrent.thread
+
+class TutorialView2 : View() {
+    override val root = borderpane {
+        top = menubar {
+            menu(messages["file"]) {
+                menu("Connect") {
+                    item("Facebook")
+                    item("Twitter")
+                }
+                separator()
+                item("Save","Shortcut+S").action{
+                    println("Saving!")
+                }
+                item("Quit")
+            }
+            menu("Edit") {
+                item("Copy")
+                item("Paste")
+            }
+        }
+
+        bottom = label("BOTTOM") {
+            useMaxWidth = true
+            style {
+                backgroundColor += Color.BLUE
+            }
+        }
+        left = tabpane {
+            tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
+            tab("Screen 1", VBox()) {
+                squeezebox {
+                    fold("Customer Editor", expanded = true) {
+                        form {
+                            fieldset("Customer Details") {
+                                field("Name") { textfield() }
+                                field("Password") { textfield() }
+                            }
+                        }
+                    }
+
+                    fold(title = messages["animationHeader"], expanded = true) {
+                        vbox {
+                            val rectangle = rectangle(width = 60.0,height = 40.0) {
+                            padding = Insets(20.0)
+                            }
+                            timeline {
+                                keyframe(5.seconds) {
+                                    keyvalue(rectangle.rotateProperty(),90.0)
+                                    keyvalue(rectangle.arcWidthProperty(),60.0)
+                                    keyvalue(rectangle.arcHeightProperty(),60.0)
+                                }
+                                isAutoReverse = true
+                                cycleCount = 3
+                            }
+
+                        }
+                        fold("Some other editor", expanded = false) {
+                            piechart("Desktop/Laptop OS Market Share") {
+                                data("Windows", 77.62)
+                                data("OS X", 9.52)
+                                data("Other", 3.06)
+                                data("Linux", 1.55)
+                                data("Chrome OS", 0.55)
+                            }
+                        }
+
+                    }
+                }
+
+
+
+            }
+            tab("Screen 2", HBox()) {
+                tableview<MyView2.Person> {
+                    items = listOf(
+                            MyView2.Person(1, "Samantha Stuart", LocalDate.of(1981, 12, 4)),
+                            MyView2.Person(2, "Tom Marks", LocalDate.of(2001, 1, 23)),
+                            MyView2.Person(3, "Stuart Gills", LocalDate.of(1989, 5, 23)),
+                            MyView2.Person(3, "Nicole Williams", LocalDate.of(1998, 8, 11))
+                    ).observable()
+                    column("ID", MyView2.Person::id)
+                    column("Name", MyView2.Person::name)
+                    column("Birthday", MyView2.Person::birthday)
+                    column("Age", MyView2.Person::age)
+
+                    contextmenu {
+                        item("Send Email").action {
+                            selectedItem?.apply { println("Sending Email to $name") }
+                        }
+                        item("Change Status").action {
+                            selectedItem?.apply { println("Changing Status for $name") }
+                        }
+                    }
+
+                }
+            }
+        }
+        right = form {
+            fieldset("Personal Info") {
+                field("First Name") {
+                    textfield()
+                }
+                field("Last Name") {
+                    textfield()
+                }
+                field("Birthday") {
+                    datepicker()
+                }
+            }
+            fieldset("Contact") {
+                field("Phone") {
+                    textfield()
+                }
+                field("Email") {
+                    textfield()
+                }
+            }
+            button("Commit") {
+                action { println("Wrote to database!")}
+            }
+        }
+
+        center =
+            vbox {
+                button("Button 1") {
+                    action {
+                        replaceWith(TutorialView::class)
+                    }
+                    vboxConstraints {
+                        marginBottom = 20.0
+                        vGrow = Priority.ALWAYS
+                    }
+                }
+
+                button("Button 2") {
+                    action {
+                        println("Button 2 Pressed")
+                    }
+                    vgrow = Priority.ALWAYS // what should this do?
+                }
+
+                flowpane {
+                    for (i in 1..100) {
+                        button(i.toString()) {
+                            setOnAction { println("You pressed button $i") }
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
 
 class TutorialView : View() {
     private val controller: MyController by inject()
