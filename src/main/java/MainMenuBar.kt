@@ -15,7 +15,7 @@ class MainMenuBar : View("My View") {
                 println("Saving!")
             }
             item("Quit", "Shortcut+Q").action {
-                application.stop()
+                System.exit(0)
             }
         }
     }
