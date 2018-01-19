@@ -1,5 +1,7 @@
+package ui
+
+import model.DailyConsumptionData
 import tornadofx.*
-import javafx.scene.control.TableView
 
 /**
  * Created by MThomas on 18.01.2018.

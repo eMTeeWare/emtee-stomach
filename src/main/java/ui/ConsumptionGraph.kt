@@ -1,3 +1,5 @@
+package ui
+
 import javafx.scene.Parent
 import javafx.scene.chart.CategoryAxis
 import javafx.scene.chart.NumberAxis

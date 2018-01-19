@@ -1,6 +1,7 @@
+package ui
+
 import javafx.scene.layout.BorderPane
 import tornadofx.*
-import tornadofx.InternalWindow.Styles.Companion.top
 
 /**
  * Created by MThomas on 18.01.2018.

@@ -1,3 +1,5 @@
+package ui
+
 import tornadofx.*
 import javafx.scene.control.MenuBar
 import tornadofx.FX.Companion.application

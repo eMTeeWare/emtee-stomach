@@ -1,3 +1,5 @@
+package tornadofxtutorial
+
 import javafx.beans.property.Property
 import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
@@ -15,8 +17,8 @@ import tornadofx.setValue
 
 class TutorialListView : View("My View") {
     val persons = listOf(
-            BirthdayPerson("John Marlow", LocalDate.of(1982,11,2)),
-            BirthdayPerson("Samantha James", LocalDate.of(1973,2,4))
+            BirthdayPerson("John Marlow", LocalDate.of(1982, 11, 2)),
+            BirthdayPerson("Samantha James", LocalDate.of(1973, 2, 4))
     ).observable()
     override val root = listview(persons) {
         cellFragment(PersonCellFragment::class)

@@ -1,9 +1,9 @@
-import com.sun.org.apache.bcel.internal.Repository.addClass
+package tornadofxtutorial
+
 import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.geometry.Insets
-import javafx.scene.Parent
 import javafx.scene.control.Button
 import javafx.scene.control.TabPane
 import javafx.scene.control.TextField
@@ -15,7 +15,6 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import javafx.stage.StageStyle
-import javafx.util.Duration
 import tornadofx.*
 import java.time.LocalDate
 import java.time.Period
@@ -51,9 +50,9 @@ class TutorialView2 : View() {
             tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
             tab("Screen 1", VBox()) {
                 squeezebox {
-                    fold("Customer Editor", expanded = true) {
+                    fold("tornadofxtutorial.Customer Editor", expanded = true) {
                         form {
-                            fieldset("Customer Details") {
+                            fieldset("tornadofxtutorial.Customer Details") {
                                 field("Name") { textfield() }
                                 field("Password") { textfield() }
                             }
@@ -190,7 +189,7 @@ class TutorialView : View() {
             }
         }
         hbox {
-            button("Go to MyView2") {
+            button("Go to tornadofxtutorial.MyView2") {
                 action {
                     replaceWith(MyView2::class, ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.RIGHT))
                 }
@@ -206,7 +205,7 @@ class TutorialView : View() {
                 }
 
             }
-            button("Go to MyView3") {
+            button("Go to tornadofxtutorial.MyView3") {
                 action{
                     replaceWith(MyView3::class)
                 }
@@ -296,10 +295,10 @@ class MyView2: View() {
 
 
     private val persons = listOf(
-            Person(1,"Samantha Stuart", LocalDate.of(1981,12,4)),
-            Person(2,"Tom Marks",LocalDate.of(2001,1,23)),
-            Person(3,"Stuart Gills",LocalDate.of(1989,5,23)),
-            Person(3,"Nicole Williams",LocalDate.of(1998,8,11))
+            Person(1, "Samantha Stuart", LocalDate.of(1981, 12, 4)),
+            Person(2, "Tom Marks", LocalDate.of(2001, 1, 23)),
+            Person(3, "Stuart Gills", LocalDate.of(1989, 5, 23)),
+            Person(3, "Nicole Williams", LocalDate.of(1998, 8, 11))
     ).observable()
 
 
@@ -314,11 +313,11 @@ class MyView2: View() {
         }
 
         tableview(persons) {
-            column("ID",Person::id).makeEditable()
+            column("ID", Person::id).makeEditable()
             column("Name", Person::name).makeEditable()
             column("Birthday", Person::birthday).makeEditable()
             // how to make this update when birthday is changed?
-            column("Age",Person::age).cellFormat {
+            column("Age", Person::age).cellFormat {
                 text = it.toString()
                 style {
                     if(it < 22) {
@@ -333,16 +332,16 @@ class MyView2: View() {
         }
 
         tableview(regions) {
-            column("ID",Region::id)
+            column("ID", Region::id)
             column("Name", Region::name)
             column("Country", Region::country)
             rowExpander(expandOnDoubleClick = true) {
                 paddingLeft = expanderColumn.width
                 tableview(it.branches) {
-                    column("ID",Branch::id)
-                    column("Facility Code",Branch::facilityCode)
-                    column("City",Branch::city)
-                    column("State/Province",Branch::stateProvince)
+                    column("ID", Branch::id)
+                    column("Facility Code", Branch::facilityCode)
+                    column("City", Branch::city)
+                    column("State/Province", Branch::stateProvince)
                 }
             }
         }
@@ -357,30 +356,30 @@ class Branch(val id: Int, val facilityCode: String, val city: String, val stateP
 class Region(val id: Int, val name: String, val country: String, val branches: ObservableList<Branch>)
 
 val regions = listOf(
-        Region(1,"Pacific Northwest", "USA",listOf(
-                Branch(1,"D","Seattle","WA"),
-                Branch(2,"W","Portland","OR")
+        Region(1, "Pacific Northwest", "USA", listOf(
+                Branch(1, "D", "Seattle", "WA"),
+                Branch(2, "W", "Portland", "OR")
         ).observable()),
-        Region(2,"Alberta", "Canada",listOf(
-                Branch(3,"W","Calgary","AB")
+        Region(2, "Alberta", "Canada", listOf(
+                Branch(3, "W", "Calgary", "AB")
         ).observable()),
-        Region(3,"Midwest", "USA", listOf(
-                Branch(4,"D","Chicago","IL"),
-                Branch(5,"D","Frankfort","KY"),
-                Branch(6, "W","Indianapolis", "IN")
+        Region(3, "Midwest", "USA", listOf(
+                Branch(4, "D", "Chicago", "IL"),
+                Branch(5, "D", "Frankfort", "KY"),
+                Branch(6, "W", "Indianapolis", "IN")
         ).observable())
 ).observable()
 
 class MyView3 : View() {
     data class Person(val name: String, val department: String)
     val persons = listOf(
-            Person("Mary Hanes","Marketing"),
-            Person("Steve Folley","Customer Service"),
-            Person("John Ramsy","IT Help Desk"),
-            Person("Erlick Foyes","Customer Service"),
-            Person("Erin James","Marketing"),
-            Person("Jacob Mays","IT Help Desk"),
-            Person("Larry Cable","Customer Service")
+            Person("Mary Hanes", "Marketing"),
+            Person("Steve Folley", "tornadofxtutorial.Customer Service"),
+            Person("John Ramsy", "IT Help Desk"),
+            Person("Erlick Foyes", "tornadofxtutorial.Customer Service"),
+            Person("Erin James", "Marketing"),
+            Person("Jacob Mays", "IT Help Desk"),
+            Person("Larry Cable", "tornadofxtutorial.Customer Service")
     )
     val departments = persons
             .map { it.department }
@@ -412,7 +411,7 @@ class MyView3 : View() {
         treeview<Person> {
             // Create root item
             root = TreeItem(Person("Departments", ""))
-            // Make sure the text in each TreeItem is the name of the Person
+            // Make sure the text in each TreeItem is the name of the tornadofxtutorial.Person
             cellFormat { text = it.name }
             // Generate items. Children of the root item will contain departments
             populate { parent ->
@@ -460,7 +459,7 @@ class MyStyle: Stylesheet() {
 
         tackyButton {
             rotate = 10.deg
-            borderColor += box(topColor,rightColor,bottomColor,leftColor)
+            borderColor += box(topColor, rightColor, bottomColor, leftColor)
             fontFamily = "Comic Sans MS"
             fontSize = 20.px
         }

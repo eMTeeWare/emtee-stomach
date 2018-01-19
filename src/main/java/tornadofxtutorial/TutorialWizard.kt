@@ -1,3 +1,5 @@
+package tornadofxtutorial
+
 import tornadofx.*
 
 /**

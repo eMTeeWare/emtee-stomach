@@ -1,11 +1,11 @@
+package tornadofxtutorial
+
 import javafx.beans.property.Property
 import javafx.beans.property.SimpleStringProperty
-import javafx.scene.Parent
 import javafx.scene.layout.BorderPane
 import tornadofx.*
-import tornadofx.Stylesheet.Companion.right
 
-class TutorialModel : View("Person Editor") {
+class TutorialModel : View("tornadofxtutorial.Person Editor") {
     override val root = BorderPane()
     init {
         with(root) {
@@ -26,7 +26,7 @@ class Person(name: String? = null, title: String? = null) {
     var title by titleProperty
 }
 
-class PersonList : View("Person List") {
+class PersonList : View("tornadofxtutorial.Person List") {
     val persons = listOf(Person("John", "Manager"), Person("Jay", "Worker bee")).observable()
     val model : PersonModel by inject()
 
@@ -39,7 +39,7 @@ class PersonList : View("Person List") {
     }
 }
 
-class PersonEditor : View("Person Editor") {
+class PersonEditor : View("tornadofxtutorial.Person Editor") {
     val model : PersonModel by inject()
 
     override val root = form {

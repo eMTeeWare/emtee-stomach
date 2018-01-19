@@ -1,3 +1,5 @@
+package tornadofxtutorial
+
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
@@ -23,7 +25,7 @@ class TableEditView : View("My View") {
         center = tableview<Customer> {
             items = controller.customers
             isEditable = true
-            column("ID",Customer::idProperty)
+            column("ID", Customer::idProperty)
             column("FIRST NAME", Customer::firstNameProperty).makeEditable().remainingWidth()
             column("LAST NAME", Customer::lastNameProperty).makeEditable().contentWidth(padding = 50.0)
             enableCellEditing() //enables easier cell navigation/editing
