@@ -4,9 +4,6 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-/**
- * Created by MThomas on 17.01.2018.
- */
 class TableEditView : View("My View") {
     val myView2: MyView2 by inject()
 

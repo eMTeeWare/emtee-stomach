@@ -11,10 +11,6 @@ import java.time.Period
 import tornadofx.getValue
 import tornadofx.setValue
 
-/**
- * Created by MThomas on 17.01.2018.
- */
-
 class TutorialListView : View("My View") {
     val persons = listOf(
             BirthdayPerson("John Marlow", LocalDate.of(1982, 11, 2)),

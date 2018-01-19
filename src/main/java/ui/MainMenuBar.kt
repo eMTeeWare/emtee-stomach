@@ -4,9 +4,6 @@ import tornadofx.*
 import javafx.scene.control.MenuBar
 import tornadofx.FX.Companion.application
 
-/**
- * Created by MThomas on 18.01.2018.
- */
 class MainMenuBar : View() {
     override val root = menubar {
         menu(messages["filemenu"]) {

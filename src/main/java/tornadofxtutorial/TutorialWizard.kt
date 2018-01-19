@@ -2,9 +2,6 @@ package tornadofxtutorial
 
 import tornadofx.*
 
-/**
- * Created by MThomas on 17.01.2018.
- */
 class TutorialWizard : Wizard("Create customer", "Provide customer information")  {
     val customer: PersonModel by inject()
     init {
