@@ -1,23 +1,21 @@
 package ui
 
-import javafx.scene.layout.BorderPane
 import tornadofx.*
 
 class MainView : View() {
-    override val root = BorderPane()
+    val leftView : FoodConsumptionView by inject()
+    val topView : MainMenuBar by inject()
+    val centerView : ConsumptionGraph by inject()
+    override val root = borderpane {
+
+    }
     init {
+        with(root) {
+            top = topView.root
+            center = centerView.root
+            left = leftView.root
+        }
         // this will not work in the View constructor
         title = messages["appname"]
-        with(root) {
-            top {
-                root += MainMenuBar()
-            }
-            left {
-                root += FoodConsumptionView()
-            }
-            center {
-                root += ConsumptionGraph()
-            }
-        }
     }
 }
