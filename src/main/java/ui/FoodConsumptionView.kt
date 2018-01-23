@@ -3,8 +3,6 @@ package ui
 import controller.DailyConsumptionController
 import model.DailyConsumptionData
 import tornadofx.*
-import java.time.LocalDate
-import java.time.Month
 
 class FoodConsumptionView : View() {
     val controller : DailyConsumptionController by inject()
